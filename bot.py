@@ -19,11 +19,10 @@ from os import getenv
 from sys import exit
 from random import randint
 from contextlib import suppress
-
+import datetime
 
 bot = Bot("5313791416:AAGynLjrG2Jo5C0BhKiEgRPAlsjTgku-_wQ")
 dp = Dispatcher(bot)
-
 
 user_data = {}
 
@@ -47,7 +46,7 @@ async def register_user(message: Message):
 
 
 @dp.message_handler(Text(equals="Доходы"))
-async def with_puree(message: Message):
+async def incomes_chosen(message: Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ["Добавить Доходы", "Показать Доходы"]
     keyboard.add(*buttons)
@@ -55,11 +54,23 @@ async def with_puree(message: Message):
 
 
 @dp.message_handler(Text(equals="Расходы"))
-async def with_puree(message: Message):
+async def expenses_chosen(message: Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ["Добавить Расходы", "Показать Расходы"]
     keyboard.add(*buttons)
     await message.answer("Что выберем?", reply_markup=keyboard)
+
+
+@dp.callback_query_handler(text="Добавить Доходы")
+async def send_random_value(call: CallbackQuery):
+    user_id = call.message.from_user.id
+    full_name = call.message.from_user.full_name
+    add_income_for_user = DBTools().incomes_tools.add_income(user_id, 123, "Развлечения", str(datetime.datetime.now()))
+    await add_income_for_user
+
+    await call.message.answer()
+    await call.answer(text="Спасибо, что воспользовались ботом!", show_alert=True)
+    # или просто await call.answer()
 
 
 executor.start_polling(dp, skip_updates=True)
