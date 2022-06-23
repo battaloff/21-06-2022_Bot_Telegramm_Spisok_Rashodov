@@ -10,8 +10,22 @@ from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyb
                            CallbackQuery)
 from tools import DBTools
 
+import logging
+from aiogram import Bot, Dispatcher, executor, types
+from aiogram.dispatcher.filters import Text
+from aiogram.utils.exceptions import MessageNotModified
+from aiogram.utils.callback_data import CallbackData
+from os import getenv
+from sys import exit
+from random import randint
+from contextlib import suppress
+
+
 bot = Bot("5313791416:AAGynLjrG2Jo5C0BhKiEgRPAlsjTgku-_wQ")
 dp = Dispatcher(bot)
+
+
+user_data = {}
 
 
 @dp.message_handler(commands=["start"])
@@ -20,7 +34,10 @@ async def start(message: Message):
     full_name = message.from_user.full_name
     await register_user(message)
     await bot.send_message(chat_id, f"Привет {full_name}")
-    await user_choice(message)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+    buttons = ["Доходы", "Расходы"]
+    keyboard.add(*buttons)
+    await message.answer("Сделайте свой выбор:", reply_markup=keyboard)
 
 
 async def register_user(message: Message):
@@ -29,10 +46,20 @@ async def register_user(message: Message):
     DBTools().user_tools.register_user(full_name, chat_id)
 
 
-async def user_choice(message: Message):
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ["Доходы", "Расходы"]
+@dp.message_handler(Text(equals="Доходы"))
+async def with_puree(message: Message):
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    buttons = ["Добавить Доходы", "Показать Доходы"]
     keyboard.add(*buttons)
-    await message.answer("Выбирайте категорию:", reply_markup=keyboard)
+    await message.answer("Что выберем?", reply_markup=keyboard)
+
+
+@dp.message_handler(Text(equals="Расходы"))
+async def with_puree(message: Message):
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    buttons = ["Добавить Расходы", "Показать Расходы"]
+    keyboard.add(*buttons)
+    await message.answer("Что выберем?", reply_markup=keyboard)
+
 
 executor.start_polling(dp, skip_updates=True)

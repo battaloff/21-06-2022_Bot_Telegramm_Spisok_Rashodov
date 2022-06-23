@@ -26,35 +26,18 @@ dp = Dispatcher(bot)
 user_data = {}
 
 
-@dp.message_handler(commands=["start"])
-async def start(message: Message):
-    chat_id = message.chat.id
-    full_name = message.from_user.full_name
-    await register_user(message)
-    await bot.send_message(chat_id, f"Привет {full_name}")
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ["Доходы", "Расходы"]
-    keyboard.add(*buttons)
-    await message.answer("Сделайте свой выбор:", reply_markup=keyboard)
+@dp.message_handler(commands="random")
+async def cmd_random(message: types.Message):
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(types.InlineKeyboardButton(text="Нажми меня", callback_data="random_value"))
+    await message.answer("Нажмите на кнопку, чтобы бот отправил число от 1 до 10", reply_markup=keyboard)
 
 
-async def register_user(message: Message):
-    full_name = message.from_user.full_name
-    chat_id = message.chat.id
-    DBTools().user_tools.register_user(full_name, chat_id)
-
-
-@dp.message_handler(Text(equals="Доходы"))
-async def with_puree(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ["Добавить Доходы", "Показать Доходы"]
-    keyboard.add(*buttons)
-    await message.answer("Что выберем?:", reply_markup=keyboard)
-
-
-@dp.message_handler(lambda message: message.text == "Без пюрешки")
-async def without_puree(message: types.Message):
-    await message.reply("Так невкусно!")
+@dp.callback_query_handler(text="random_value")
+async def send_random_value(call: types.CallbackQuery):
+    await call.message.answer(str(randint(1, 10)))
+    await call.answer(text="Спасибо, что воспользовались ботом!", show_alert=True)
+    # или просто await call.answer()
 
 
 executor.start_polling(dp, skip_updates=True)
