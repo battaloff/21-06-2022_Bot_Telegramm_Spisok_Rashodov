@@ -26,15 +26,22 @@ dp = Dispatcher(bot)
 user_data = {}
 
 
-
-
-
-@dp.message_handler(commands="start")
-async def cmd_start(message: types.Message):
+@dp.message_handler(commands=["start"])
+async def start(message: Message):
+    chat_id = message.chat.id
+    full_name = message.from_user.full_name
+    await register_user(message)
+    await bot.send_message(chat_id, f"Привет {full_name}")
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ["Доходы", "Расходы"]
     keyboard.add(*buttons)
     await message.answer("Сделайте свой выбор:", reply_markup=keyboard)
+
+
+async def register_user(message: Message):
+    full_name = message.from_user.full_name
+    chat_id = message.chat.id
+    DBTools().user_tools.register_user(full_name, chat_id)
 
 
 @dp.message_handler(Text(equals="Доходы"))
