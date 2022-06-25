@@ -31,13 +31,13 @@ class _UserTools(_BaseTools):
 
 
 class _IncomesTools(_BaseTools):
-    def add_income(self, user_id: int, income: int, categories: str, date_time: str) -> bool:
+    def add_income(self, user_id: int, income: int, date_time: str) -> bool:
         status_income_add = False
         try:
             self.cursor.execute("""INSERT INTO incomes 
-            (user_id, income, categories, date_time)
-            VALUES (?, ?, ?, ?)
-            """, (user_id, income, categories, date_time))
+            (user_id, income, date_time)
+            VALUES (?, ?, ?)
+            """, (user_id, income, date_time))
         except:
             pass
         else:
