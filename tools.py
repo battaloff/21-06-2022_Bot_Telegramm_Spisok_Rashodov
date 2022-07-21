@@ -48,16 +48,16 @@ class _IncomesTools(_BaseTools):
             return status_income_add
 
     def get_incomes_by_user(self, user_id: int) -> list:
-        self.cursor.execute("""SELECT income
+        self.cursor.execute("""SELECT SUM (income)
         FROM incomes
         WHERE user_id = ?
         """, (user_id,))
-        income: list = self.cursor.fetchall()
+        income: list = self.cursor.fetchone()[0]
         self.connection.close()
         return income
 
     def get_incomes_by_datetime_and_user_id(self, user_id: int, date_time: str):
-        self.cursor.execute("""SELECT income
+        self.cursor.execute("""SELECT SUM (income)
         FROM incomes
         WHERE user_id =? AND date_time = ?
         """, (user_id, date_time))
@@ -84,7 +84,7 @@ class _ExpenseTools(_BaseTools):
             return status_expense_add
 
     def get_expense_by_user(self, user_id: int) -> list:
-        self.cursor.execute("""SELECT expense
+        self.cursor.execute("""SELECT SUM (expense)
         FROM expenses
         WHERE user_id = ?
         """, (user_id,))
@@ -93,7 +93,7 @@ class _ExpenseTools(_BaseTools):
         return expense
 
     def get_expenses_by_datetime_and_user(self, user_id: int, date_time: str):
-        self.cursor.execute("""SELECT expense
+        self.cursor.execute("""SELECT SUM (expense)
         FROM expenses
         WHERE user_id =? AND date_time = ?
         """, (user_id, date_time))
