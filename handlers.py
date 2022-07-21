@@ -67,8 +67,8 @@ async def expenses_chosen(message: Message):
 
 
 @dp.message_handler(Text(equals="За Год"))
-async def show_incomes_by_user(message: Message):
+async def get_expenses_by_year(message: Message):
     chat_id = message.chat.id
     user_id = DBTools().user_tools.get_user_id(chat_id)
-    incomes = DBTools().expenses_tools.get_expenses_by_datetime_and_user(user_id)
-    await bot.send_message(chat_id, f"Ваши доходы: {incomes} сум")
+    expenses = DBTools().expenses_tools.get_expenses_by_year(user_id)
+    await bot.send_message(chat_id, f"Ваши доходы: {expenses} сум")

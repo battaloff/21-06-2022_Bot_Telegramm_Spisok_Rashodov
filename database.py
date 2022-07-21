@@ -24,7 +24,7 @@ class InitDB:
         user_id INTEGER REFERENCES users(id),
         income DECIMAL(9, 2) DEFAULT 0,
         categories VARCHAR (30) NOT NULL UNIQUE,
-        date_time DATETIME NOT NULL
+        date_time TEXT NOT NULL
         )""")
 
     def __create_expenses_table(self):
@@ -33,7 +33,7 @@ class InitDB:
         user_id INTEGER REFERENCES users(id),
         expense DECIMAL(9, 2) DEFAULT 0,
         categories VARCHAR (30) NOT NULL UNIQUE,
-        date_time DATETIME NOT NULL
+        date_time TEXT NOT NULL
         )""")
 
     def start(self):

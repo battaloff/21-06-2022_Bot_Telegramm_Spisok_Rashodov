@@ -31,7 +31,7 @@ class _UserTools(_BaseTools):
 
 
 class _IncomesTools(_BaseTools):
-    def add_income(self, user_id: int, income: int, date_time: str) -> bool:
+    def add_income(self, user_id: int, income: float, date_time: str) -> bool:
         status_income_add = False
         try:
             self.cursor.execute("""INSERT INTO incomes 
@@ -65,14 +65,23 @@ class _IncomesTools(_BaseTools):
         self.connection.close()
         return income_by_dt_and_user_id
 
+    def get_incomes_by_year(self, user_id: int, date_time: str):
+        self.cursor.execute("""SELECT SUM (income)
+        FROM incomes
+        WHERE date>= '2022-01-01' AND date < 'now'
+        """, (user_id, date_time))
+        income_by_dt_and_user_id: list = self.cursor.fetchone()[0]
+        self.connection.close()
+        return income_by_dt_and_user_id
+
 
 class _ExpenseTools(_BaseTools):
-    def add_expense(self, user_id: int, expense: int, categories: str, date_time: str) -> bool:
+    def add_expense(self, user_id: int, expense: float, categories: str, date_time: str) -> bool:
         status_expense_add = False
         try:
             self.cursor.execute("""INSERT INTO expenses 
             (user_id, expense, categories, date_time)
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, date("now"))
             """, (user_id, expense, categories, date_time))
         except:
             pass
@@ -100,6 +109,15 @@ class _ExpenseTools(_BaseTools):
         expense_by_dt_and_user_id: list = self.cursor.fetchall()[0]
         self.connection.close()
         return expense_by_dt_and_user_id
+
+    def get_expenses_by_year(self, user_id: int):
+        self.cursor.execute("""SELECT SUM (expense)
+        FROM expenses
+        WHERE date_time = "2022-07-21"
+        """, (user_id,))
+        expenses_by_year: list = self.cursor.fetchall()
+        self.connection.close()
+        return expenses_by_year
 
 
 class DBTools:
