@@ -58,6 +58,9 @@ async def expenses_chosen(message: Message):
     await message.answer("Что выберем?", reply_markup=keyboard)
 
 
-
-
-
+@dp.message_handler(Text(equals="🙈  Показать Расходы"))
+async def show_incomes_by_user(message: Message):
+    chat_id = message.chat.id
+    user_id = DBTools().user_tools.get_user_id(chat_id)
+    expenses = DBTools().expenses_tools.get_expense_by_user(user_id)
+    await bot.send_message(chat_id, f"Ваши доходы: {expenses} сум")

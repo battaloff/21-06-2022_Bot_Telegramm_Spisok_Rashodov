@@ -61,7 +61,7 @@ class _IncomesTools(_BaseTools):
         FROM incomes
         WHERE user_id =? AND date_time = ?
         """, (user_id, date_time))
-        income_by_dt_and_user_id: list = self.cursor.fetchall()
+        income_by_dt_and_user_id: list = self.cursor.fetchall()[0]
         self.connection.close()
         return income_by_dt_and_user_id
 
@@ -88,7 +88,7 @@ class _ExpenseTools(_BaseTools):
         FROM expenses
         WHERE user_id = ?
         """, (user_id,))
-        expense: list = self.cursor.fetchall()
+        expense: list = self.cursor.fetchone()[0]
         self.connection.close()
         return expense
 
@@ -97,7 +97,7 @@ class _ExpenseTools(_BaseTools):
         FROM expenses
         WHERE user_id =? AND date_time = ?
         """, (user_id, date_time))
-        expense_by_dt_and_user_id: list = self.cursor.fetchall()
+        expense_by_dt_and_user_id: list = self.cursor.fetchall()[0]
         self.connection.close()
         return expense_by_dt_and_user_id
 
