@@ -2,7 +2,7 @@ import sqlite3
 
 
 def connect_database():
-    connection = sqlite3.connect("DataBase.sqlite")
+    connection = sqlite3.connect("../DataBase.sqlite")
     cursor = connection.cursor()
     return connection, cursor
 

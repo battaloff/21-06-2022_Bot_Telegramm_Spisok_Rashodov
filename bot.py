@@ -14,5 +14,5 @@ bot = Bot(os.getenv("BOT_TOKEN"))
 dp = Dispatcher(bot)
 
 if __name__ == "__main__":
-    from handlers.handlers import *
+    from handlers import *
     executor.start_polling(dp, skip_updates=True)
