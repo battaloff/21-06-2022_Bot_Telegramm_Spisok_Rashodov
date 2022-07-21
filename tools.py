@@ -56,7 +56,7 @@ class _IncomesTools(_BaseTools):
         self.connection.close()
         return income
 
-    def get_incomes_by_datetime_and_user(self, user_id: int, date_time: str):
+    def get_incomes_by_datetime_and_user_id(self, user_id: int, date_time: str):
         self.cursor.execute("""SELECT income
         FROM incomes
         WHERE user_id =? AND date_time = ?
