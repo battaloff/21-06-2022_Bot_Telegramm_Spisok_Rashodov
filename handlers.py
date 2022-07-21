@@ -37,7 +37,7 @@ async def incomes_chosen(message: Message):
 async def show_incomes_by_user(message: Message):
     chat_id = message.chat.id
     user_id = DBTools().user_tools.get_user_id(chat_id)
-    date_time = datetime.datetime.now().strftime("%d-%m-%Y   %H:%M:%S")
+    date_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     income = DBTools().incomes_tools.add_income(user_id, int(input()), date_time)
     await bot.send_message(chat_id, f"Ваши доходы, {income} !")
 
