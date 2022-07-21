@@ -53,14 +53,22 @@ async def show_incomes_by_user(message: Message):
 @dp.message_handler(Text(equals="🔼  Расходы"))
 async def expenses_chosen(message: Message):
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ["➕  Добавить Расходы", "🙈  Показать Расходы"]
+    buttons = ["➕  Добавить Расходы", "Показать Расходы"]
     keyboard.add(*buttons)
     await message.answer("Что выберем?", reply_markup=keyboard)
 
 
-@dp.message_handler(Text(equals="🙈  Показать Расходы"))
+@dp.message_handler(Text(equals="Показать Расходы"))
+async def expenses_chosen(message: Message):
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=4)
+    buttons = ["За Год", "За Месяц", "За неделю", "За День"]
+    keyboard.add(*buttons)
+    await message.answer("Что выберем?", reply_markup=keyboard)
+
+
+@dp.message_handler(Text(equals="За Год"))
 async def show_incomes_by_user(message: Message):
     chat_id = message.chat.id
     user_id = DBTools().user_tools.get_user_id(chat_id)
-    expenses = DBTools().expenses_tools.get_expense_by_user(user_id)
-    await bot.send_message(chat_id, f"Ваши доходы: {expenses} сум")
+    incomes = DBTools().expenses_tools.get_expenses_by_datetime_and_user(user_id)
+    await bot.send_message(chat_id, f"Ваши доходы: {incomes} сум")
