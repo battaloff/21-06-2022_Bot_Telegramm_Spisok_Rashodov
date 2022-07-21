@@ -1,4 +1,4 @@
-from database import connect_database
+from database.utils import connect_database
 
 
 class BaseTools:
