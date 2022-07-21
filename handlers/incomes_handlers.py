@@ -1,10 +1,20 @@
 import datetime
 
 from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher.filters.state import StatesGroup, State
+from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, Message
 
 from bot import bot, dp
 from database.tools import DBTools
+
+
+class IncomesForm(StatesGroup):
+    category = State()
+    money_profit = State()
+    description = State()
+
+# TODO Дописать Finite State Machine (FSM)
 
 
 @dp.message_handler(Text(equals="🔽  Доходы"))
