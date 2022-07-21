@@ -113,9 +113,9 @@ class _ExpenseTools(_BaseTools):
     def get_expenses_by_year(self, user_id: int):
         self.cursor.execute("""SELECT SUM (expense)
         FROM expenses
-        WHERE date_time = "2022-07-21"
+        WHERE user_id =? AND date_time >= "2022-07-21"
         """, (user_id,))
-        expenses_by_year: list = self.cursor.fetchall()
+        expenses_by_year: list = self.cursor.fetchone()[0]
         self.connection.close()
         return expenses_by_year
 

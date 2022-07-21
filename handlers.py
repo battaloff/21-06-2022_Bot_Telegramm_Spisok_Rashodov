@@ -71,4 +71,4 @@ async def get_expenses_by_year(message: Message):
     chat_id = message.chat.id
     user_id = DBTools().user_tools.get_user_id(chat_id)
     expenses = DBTools().expenses_tools.get_expenses_by_year(user_id)
-    await bot.send_message(chat_id, f"Ваши доходы: {expenses} сум")
+    await bot.send_message(chat_id, f"Ваши расходы за этот год: {expenses} сум")
