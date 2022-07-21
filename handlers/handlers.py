@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.types import ReplyKeyboardMarkup, Message
 
 from bot import bot, dp
-from tools import DBTools
+from database.tools import DBTools
 
 
 @dp.message_handler(commands=["start"])
